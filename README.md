@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# LEDOS
+# Kinetics
 
 <!-- badges: start -->
 <!-- badges: end -->
