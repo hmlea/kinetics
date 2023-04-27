@@ -35,7 +35,7 @@ ui = fluidPage(
              windowTitle="Kinetics"),
   
   sidebarPanel(
-    fileInput("sheets", "Upload CSV file here:", multiple=TRUE,
+    fileInput("sheets", "Upload CSV file here:", multiple=FALSE,
               accept = c("text/csv",
                          "text/comma-separated-values,text/plain",
                          ".csv")),
