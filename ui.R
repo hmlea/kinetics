@@ -42,7 +42,7 @@ ui = fluidPage(
   sidebarPanel(
     # sidebar for rate calculations
     conditionalPanel(condition="input.tabselected==1",
-                     fileInput("sheets1", "Upload CSV file here:", multiple=TRUE,
+                     fileInput("sheets1", "Upload CSV files here:", multiple=TRUE,
                                accept = c("text/csv",
                                           "text/comma-separated-values,text/plain",
                                           ".csv")),

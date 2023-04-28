@@ -73,3 +73,4 @@ In the future, I would like to:
 - Allow for certain plot features to be selectively hidden or shown
 - Expand and enhance the upload spreadsheet functionality
 - Add an advanced features option that allows more customization
+- Add visual cue when the plot is clicked
