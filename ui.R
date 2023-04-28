@@ -24,8 +24,12 @@ ui = fluidPage(
                    }
                    hr {
                      margin-top:25px;
+                   }
+                   .checkbox {
+                     margin-bottom:-13px;
                    }")),
   
+  # icon and title
   tags$head(tags$link(rel="shortcut icon",
                       href=knitr::image_uri("kinetics.ico"),
                       type="image/x-icon")),
@@ -34,31 +38,62 @@ ui = fluidPage(
                  style="padding-bottom:0.8rem;"),
              windowTitle="Kinetics"),
   
+  # sidebar panels for each tab
   sidebarPanel(
-    fileInput("sheets", "Upload CSV file here:", multiple=FALSE,
-              accept = c("text/csv",
-                         "text/comma-separated-values,text/plain",
-                         ".csv")),
-    
-    tags$hr(),
-    
-    textInput("title", "Title:", value="LDHA Mutant Michaelis-Menten Plot"),
-    textInput("x_label", "X-axis label:", value="[Pyruvate] (mM)"),
-    textInput("y_label", "Y-axis label:", value="Rate (uM/s)"),
-    
-    tags$hr(),
-    
-    fluidRow(
-      column(6, numericInput("width", "Width", value=775, min=100)),
-      column(6, numericInput("height", "Height", value=425, min=100))
+    # sidebar for rate calculations
+    conditionalPanel(condition="input.tabselected==1",
+                     fileInput("sheets1", "Upload CSV file here:", multiple=TRUE,
+                               accept = c("text/csv",
+                                          "text/comma-separated-values,text/plain",
+                                          ".csv")),
+                     
+                     tags$hr(),
+                     
+                     fluidRow(
+                       column(6, numericInput("width1", "Width", value=650, min=100)),
+                       column(6, numericInput("height1", "Height", value=475, min=100))
+                     ),
+                     plainDLButton("dl_plt1", "Download Plots"),
+                     checkboxInput("show_lm", label="Show Rate Line", value=FALSE)
     ),
-    plainDLButton("dl_plt", "Download Plot")
+    
+    # sidebar for michaelis-menten plots
+    conditionalPanel(condition="input.tabselected==2",
+                     fileInput("sheets2", "Upload CSV file here:", multiple=FALSE,
+                               accept = c("text/csv",
+                                          "text/comma-separated-values,text/plain",
+                                          ".csv")),
+                     
+                     tags$hr(),
+                     
+                     textInput("title", "Title:", value="LDHA Mutant Michaelis-Menten Plot"),
+                     textInput("x_label", "X-axis label:", value="[Pyruvate] (mM)"),
+                     textInput("y_label", "Y-axis label:", value="Rate (uM/s)"),
+                     
+                     tags$hr(),
+                     
+                     fluidRow(
+                       column(6, numericInput("width2", "Width", value=650, min=100)),
+                       column(6, numericInput("height2", "Height", value=475, min=100))
+                     ),
+                     plainDLButton("dl_plt2", "Download Plot")
+    ),
   ),
   
   mainPanel(
     align = "center",
-    
-    plotOutput("plt_out")
+    tabsetPanel(type="tabs",
+                # determining rates
+                tabPanel("Rates", value=1,
+                         plotOutput("plt_out1", click="plot_click"),
+                         tableOutput("rate_out")
+                ),
+                # creating michaelis-menten plots
+                tabPanel("Michaelis-Menten", value=2,
+                         plotOutput("plt_out2")
+                ),
+                id = "tabselected"
+    )
   )
 )
 
