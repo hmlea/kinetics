@@ -195,9 +195,9 @@ shinyServer(function(input, output, session){
     showModal(
       modalDialog(title="About",
                   body_html,
-                  footer=span(div(HTML("<p>Hayden Leatherwood 2022 - built in R with <a href='https://github.com/DoseResponse/drc'>drc</a> and <a href='https://shiny.rstudio.com/'>Shiny</a></p>"),
+                  footer=span(div(HTML("<p>Hayden Leatherwood 2022 - built in R with <a href='https://github.com/DoseResponse/drc' target='_blank'>drc</a> and <a href='https://shiny.rstudio.com/' target='_blank'>Shiny</a></p>"),
                                   style="float:left; margin-bottom:-10px;"),
-                              div(HTML("<a href='https://github.com/hmlea/kinetics'>Source</a>"),
+                              div(HTML("<a href='https://github.com/hmlea/kinetics' target='_blank'>Source</a>"),
                                   style="float:right;")),
                   easyClose=T))
   })
