@@ -76,7 +76,11 @@ ui = fluidPage(
                        column(6, numericInput("width2", "Width", value=650, min=100)),
                        column(6, numericInput("height2", "Height", value=475, min=100))
                      ),
-                     plainDLButton("dl_plt2", "Download Plot")
+                     plainDLButton("dl_plt2", "Download Plot"),
+                     fluidRow(
+                       column(6, checkboxInput("show_vmax", label=HTML("Show V<sub>max</sub>"), value=FALSE)),
+                       column(6, checkboxInput("show_km", label=HTML("Show K<sub>M</sub>"), value=FALSE))
+                     )
     ),
   ),
   

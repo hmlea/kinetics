@@ -240,6 +240,19 @@ shinyServer(function(input, output, session){
                        xjust=1, yjust=1, bty="n", y.intersp=1.2)
       text(tmp_leg$rect$left+tmp_leg$rect$w, tmp_leg$text$y,
            c(vmax, km), pos=2, bty="n")
+      
+      # show the lines for vmax and km if desired
+      if(input$show_vmax) {
+        abline(h=coeffs[[1]], col="#DC5340", lty=2, lwd=2)
+      }
+      if(input$show_km) {
+        segments(x0=-1, x1=coeffs[[2]],
+                 y0=coeffs[[1]]/2, y1=coeffs[[1]]/2,
+                 col="#DC5340", lty=2, lwd=2)
+        segments(x0=coeffs[[2]], x1=coeffs[[2]],
+                 y0=coeffs[[1]]/2, y1=-1,
+                 col="#DC5340", lty=2, lwd=2)
+      }
     } else {
       # plot "no file chosen"
       plot(0, 0, xaxt="n", yaxt="n", xlab=NA, ylab=NA, type="n")
