@@ -26,7 +26,7 @@ knitr::opts_chunk$set(
 
 This web application has two main features: it allows for the calculation of enzyme rates and solves for and plots the Michaelis-Menten equation. The **Kinetics** web app can be accessed [here](https://hmlea.shinyapps.io/kinetics/) or you can download and run it on your machine using the Shiny package with the following code:
 
-    `shiny::runGitHub("hmlea/kinetics")`
+    shiny::runGitHub("hmlea/kinetics")
     
 ### Rates
 
@@ -53,3 +53,4 @@ In the future, I would like to:
 -   Expand and enhance the upload spreadsheet functionality
 -   Add an advanced features option that allows more customization
 -   Add visual cue when the plot is clicked
+-   Fix plot errors when uploading a bad file
