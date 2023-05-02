@@ -229,21 +229,15 @@ shinyServer(function(input, output, session){
            ylab=ifelse(input$y_label=="", NA, input$y_label))
       points(kin_data())
       
-      # add the km and vmax
+      # get the km and vmax values and set default to hide
       coeffs = coef(cur_fit())
-      vmax = as.expression(bquote(V[max] ~ " = " ~ .(coeffs[[1]])))
-      km = as.expression(bquote(K[M] ~ " = " ~ .(coeffs[[2]])))
-      
-      # add values to the plot
-      tmp_leg = legend("topright", legend=c(" ", " "),
-                       text.width=strwidth("1,000,000"),
-                       xjust=1, yjust=1, bty="n", y.intersp=1.2)
-      text(tmp_leg$rect$left+tmp_leg$rect$w, tmp_leg$text$y,
-           c(vmax, km), pos=2, bty="n")
+      vmax = ""
+      km = ""
       
       # show the lines for vmax and km if desired
       if(input$show_vmax) {
         abline(h=coeffs[[1]], col="#DC5340", lty=2, lwd=2)
+        vmax = as.expression(bquote(V[max] ~ " = " ~ .(coeffs[[1]])))
       }
       if(input$show_km) {
         segments(x0=-1, x1=coeffs[[2]],
@@ -252,7 +246,15 @@ shinyServer(function(input, output, session){
         segments(x0=coeffs[[2]], x1=coeffs[[2]],
                  y0=coeffs[[1]]/2, y1=-1,
                  col="#DC5340", lty=2, lwd=2)
+        km = as.expression(bquote(K[M] ~ " = " ~ .(coeffs[[2]])))
       }
+      
+      # add values to the plot
+      tmp_leg = legend("topright", legend=c(" ", " "),
+                       text.width=strwidth("1,000,000"),
+                       xjust=1, yjust=1, bty="n", y.intersp=1.2)
+      text(tmp_leg$rect$left+tmp_leg$rect$w, tmp_leg$text$y,
+           c(vmax, km), pos=2, bty="n")
     } else {
       # plot "no file chosen"
       plot(0, 0, xaxt="n", yaxt="n", xlab=NA, ylab=NA, type="n")
