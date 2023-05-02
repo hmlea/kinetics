@@ -265,6 +265,18 @@ shinyServer(function(input, output, session){
     cur_plt(recordPlot())
   })
   
+  # render the table with km and vmax when possible
+  output$mm_out = renderTable({
+    coeffs = coef(cur_fit())
+    if(is.null(coeffs)) {
+      cur_vals = data.frame()
+    } else {
+      cur_vals = data.frame("Variable"=c("Vmax", "Km"),
+                            "Value"=c(coeffs[[1]], coeffs[[2]]))
+    }
+    cur_vals
+  }, digits=8, width="80%")
+  
   # handle download press
   output$dl_plt2 = downloadHandler(
     filename="plot.png",

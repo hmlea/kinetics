@@ -94,7 +94,8 @@ ui = fluidPage(
                 ),
                 # creating michaelis-menten plots
                 tabPanel("Michaelis-Menten", value=2,
-                         plotOutput("plt_out2")
+                         plotOutput("plt_out2"),
+                         tableOutput("mm_out")
                 ),
                 id = "tabselected"
     )
