@@ -75,3 +75,4 @@ In the future, I would like to:
 - Add an advanced features option that allows more customization
 - Add visual cue when the plot is clicked
 - Fix plot errors when uploading a bad file
+- Allow fully custom … plot parameters through a text input
