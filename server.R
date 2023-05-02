@@ -272,7 +272,9 @@ shinyServer(function(input, output, session){
       cur_vals = data.frame()
     } else {
       cur_vals = data.frame("Variable"=c("Vmax", "Km"),
-                            "Value"=c(coeffs[[1]], coeffs[[2]]))
+                            "Value"=c(coeffs[[1]], coeffs[[2]]),
+                            "Std. Error"=as.data.frame(summary(cur_fit())[[3]])[["Std. Error"]],
+                            check.names=FALSE)
     }
     cur_vals
   }, digits=8, width="80%")
