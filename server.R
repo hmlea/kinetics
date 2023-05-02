@@ -209,19 +209,27 @@ shinyServer(function(input, output, session){
   kin_data = reactiveVal(NULL)
   cur_fit = reactiveVal(NULL)
   cur_plt = reactiveVal(NULL)
+  kin_plot_text = reactiveVal("no file chosen")
   
   # observe file input
   observe({
     cur_sheet = input$sheets2
     if(!is.null(cur_sheet)) {
       kin_data(read.csv(cur_sheet$datapath))
-      cur_fit(drm(kin_data()[[2]] ~ kin_data()[[1]], fct=MM.2()))
+      if(nrow(kin_data()) <= 1) {
+        kin_plot_text("bad file chosen\nfile must have at least two rows to fit a curve")
+        cur_fit(NULL)
+      } else if(!is.numeric(kin_data()[[1]]) && !is.numeric(kin_data()[[2]])) {
+        kin_plot_text("bad file chosen\nfile must contain substrate concentrations in the first column and rates in the second")
+      } else {
+        cur_fit(drm(kin_data()[[2]] ~ kin_data()[[1]], fct=MM.2()))
+      }
     }
   })
   
   # render the plot
   output$plt_out2 = renderPlot({
-    if(!is.null(kin_data())) {
+    if(!is.null(kin_data()) && !is.null(cur_fit())) {
       # plot the mm fit and points
       plot(cur_fit(), log="", type="none",
            main=ifelse(input$title=="", NA, input$title),
@@ -258,7 +266,7 @@ shinyServer(function(input, output, session){
     } else {
       # plot "no file chosen"
       plot(0, 0, xaxt="n", yaxt="n", xlab=NA, ylab=NA, type="n")
-      text(0, 0, "no file chosen")
+      text(0, 0, kin_plot_text())
     }
     
     # record the plot for downloading
