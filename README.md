@@ -59,7 +59,7 @@ spreadsheet that contains this data, with substrate concentration in the
 first column and rate in the second column. This data is plotted and a
 Michaelis-Menten curve is fit and added to the graph. Doing this solves
 for the V<sub>max</sub> and K<sub>M</sub> which is plotted alongside the
-curve in the top right hand corner of the plot. This plot can also be
+curve in the top right-hand corner of the plot. This plot can also be
 downloaded as an image with the “Download Plot” button.
 
 ## To Do
@@ -73,6 +73,7 @@ In the future, I would like to:
 - Allow for certain plot features to be selectively hidden or shown
 - Expand and enhance the upload spreadsheet functionality
 - Add an advanced features option that allows more customization
-- Add visual cue when the plot is clicked
+- Add a visual cue when the plot is clicked
 - Fix plot errors when uploading a bad file
-- Allow fully custom … plot parameters through a text input
+- Allow fully custom “…” plot parameters through a text input
+- Sanitize and check the files added for the rates
