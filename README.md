@@ -77,3 +77,5 @@ In the future, I would like to:
 - Fix plot errors when uploading a bad file
 - Allow fully custom “…” plot parameters through a text input
 - Sanitize and check the files added for the rates
+- Download a single rate plot image when only one file was selected
+  (instead of a .zip file)

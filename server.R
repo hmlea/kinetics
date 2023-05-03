@@ -29,14 +29,24 @@ shinyServer(function(input, output, session){
   last_regs = reactiveVal(NULL)
   last_rates = reactiveVal(data.frame())
   
+  # reactive value the text displayed on error
+  kin_plot_text1 = reactiveVal("no file chosen")
+  
   # observe file input
   observe({
-    # read sheets in and sanitize all reactive values
+    # read sheets in and check them
     cur_sheet = input$sheets1
     if(!is.null(cur_sheet)) {
-      isolate(all_data(NULL))
-      all_data(import_data(cur_sheet$datapath, basename(cur_sheet$name)))
-      isolate(cur_plt_index(cur_plt_index() + 1))
+      if(all(input$sheets1$type == "text/csv")) {
+        isolate(all_data(NULL))
+        all_data(import_data(cur_sheet$datapath, basename(cur_sheet$name)))
+        isolate(cur_plt_index(cur_plt_index() + 1))
+      } else {
+        kin_plot_text1("bad file chosen\nall uploaded files must be CSV spreadsheets")
+        isolate(cur_plt_index(0))
+      }
+      
+      # sanitize the reactive values
       isolate(cur_num_clicks(0))
       isolate(first_click(NULL))
       isolate(second_click(NULL))
@@ -97,10 +107,11 @@ shinyServer(function(input, output, session){
       plot(cur_data$time_sec, cur_data$nadh_conc_uM, type="l",
            main=attr(cur_data, "file_name"),
            xlab="Time (s)", ylab="[NADH] (uM)")
+      kin_plot_text1("no file chosen")
     } else {
       # plot "no file chosen"
       plot(0, 0, xaxt="n", yaxt="n", xlab=NA, ylab=NA, type="n")
-      text(0, 0, "no file chosen")
+      text(0, 0, kin_plot_text1())
     }
   })
   
@@ -236,21 +247,28 @@ shinyServer(function(input, output, session){
   cur_plt = reactiveVal(NULL)
   
   # reactive value the text displayed on error
-  kin_plot_text = reactiveVal("no file chosen")
+  kin_plot_text2 = reactiveVal("no file chosen")
   
   # observe file input
   observe({
     cur_sheet = input$sheets2
     if(!is.null(cur_sheet)) {
-      kin_data(read.csv(cur_sheet$datapath))
-      if(nrow(kin_data()) <= 1) {
-        kin_plot_text("bad file chosen\nfile must have at least two rows to fit a curve")
-        cur_fit(NULL)
-      } else if(!is.numeric(kin_data()[[1]]) && !is.numeric(kin_data()[[2]])) {
-        kin_plot_text("bad file chosen\nfile must contain substrate concentrations in the first column and rates in the second")
+      # check the file type
+      if(input$sheets2$type != "text/csv") {
+        kin_plot_text2("bad file chosen\nuploaded file must be a CSV spreadsheet")
         cur_fit(NULL)
       } else {
-        cur_fit(drm(kin_data()[[2]] ~ kin_data()[[1]], fct=MM.2()))
+        # read in and check the file contents
+        kin_data(read.csv(cur_sheet$datapath))
+        if(nrow(kin_data()) <= 1) {
+          kin_plot_text2("bad file chosen\nfile must have at least two rows to fit a curve")
+          cur_fit(NULL)
+        } else if(!is.numeric(kin_data()[[1]]) && !is.numeric(kin_data()[[2]])) {
+          kin_plot_text2("bad file chosen\nfile must contain substrate concentrations in the first column and rates in the second")
+          cur_fit(NULL)
+        } else {
+          cur_fit(drm(kin_data()[[2]] ~ kin_data()[[1]], fct=MM.2()))
+        }
       }
     }
   })
@@ -294,7 +312,7 @@ shinyServer(function(input, output, session){
     } else {
       # plot "no file chosen"
       plot(0, 0, xaxt="n", yaxt="n", xlab=NA, ylab=NA, type="n")
-      text(0, 0, kin_plot_text())
+      text(0, 0, kin_plot_text2())
     }
     
     # record the plot for downloading

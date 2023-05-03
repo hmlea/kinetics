@@ -41,9 +41,8 @@ ui = fluidPage(
     # sidebar for michaelis-menten plots
     conditionalPanel(condition="input.tabselected==2",
                      fileInput("sheets2", "Upload CSV file here:", multiple=FALSE,
-                               accept = c("text/csv",
-                                          "text/comma-separated-values,text/plain",
-                                          ".csv")),
+                               accept = c("text/csv", ".csv",
+                                          "text/comma-separated-values,text/plain")),
                      
                      tags$hr(),
                      
