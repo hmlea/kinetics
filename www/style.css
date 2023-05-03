@@ -1,0 +1,26 @@
+/* remove spinners on text input */
+input[type=number] {
+  -moz-appearance:textfield;
+}
+input[type=number]::{
+  -moz-appearance:textfield;
+}
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance:none;
+  margin:0;
+}
+
+/* remove progress bar on file upload */
+.progress-bar, .progress, .progress-bar {
+  display:none !important;
+}
+
+/* margin adjustments */
+hr {
+  margin-top:25px;
+}
+.checkbox {
+  margin-bottom:-13px;
+}
+

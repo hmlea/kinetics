@@ -7,35 +7,13 @@ plainDLButton = function(buttonID, buttonLabel="Download") {
 }
 
 ui = fluidPage(
-  # styles numeric inputs and hr
-  tags$style(HTML("input[type=number] {
-                     -moz-appearance:textfield;
-                   }
-                   input[type=number]::{
-                     -moz-appearance:textfield;
-                   }
-                   input[type=number]::-webkit-outer-spin-button,
-                   input[type=number]::-webkit-inner-spin-button {
-                     -webkit-appearance:none;
-                     margin:0;
-                   }
-                   .progress-bar, .progress, .progress-bar {
-                     display:none !important;
-                   }
-                   hr {
-                     margin-top:25px;
-                   }
-                   .checkbox {
-                     margin-bottom:-13px;
-                   }")),
+  # head icon and stylesheet links and scripts
+  tags$head(tags$link(rel="shortcut icon", type="image/x-icon",
+                      href=knitr::image_uri("kinetics.ico")),
+            tags$link(rel="stylesheet", type="text/css", href="style.css"),
+            tags$script(src="changeTitle.js")),
   
-  # script to change the browser tab title on tab change
-  tags$script(HTML('Shiny.addCustomMessageHandler("changetitle", function(x) {document.title=x});')),
-  
-  # icon and title
-  tags$head(tags$link(rel="shortcut icon",
-                      href=knitr::image_uri("kinetics.ico"),
-                      type="image/x-icon")),
+  # title panel and about button
   titlePanel(div(span("Kinetics",
                       div(actionButton("about", "About"), style="float:right;")),
                  style="padding-bottom:0.8rem;"),
@@ -46,9 +24,8 @@ ui = fluidPage(
     # sidebar for rate calculations
     conditionalPanel(condition="input.tabselected==1",
                      fileInput("sheets1", "Upload CSV files here:", multiple=TRUE,
-                               accept = c("text/csv",
-                                          "text/comma-separated-values,text/plain",
-                                          ".csv")),
+                               accept=c("text/csv", ".csv",
+                                        "text/comma-separated-values,text/plain")),
                      
                      tags$hr(),
                      
@@ -56,6 +33,7 @@ ui = fluidPage(
                        column(6, numericInput("width1", "Width", value=650, min=100)),
                        column(6, numericInput("height1", "Height", value=475, min=100))
                      ),
+                     
                      plainDLButton("dl_plt1", "Download Plots"),
                      checkboxInput("show_lm", label="Show Rate Line", value=FALSE)
     ),

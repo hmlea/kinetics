@@ -1,10 +1,11 @@
 # load the drc library and the function files
 library(drc)
-source("rate_core.R")
+source("rateCore.R")
 
 shinyServer(function(input, output, session){
   # function for not sanitizing tables
   no_san = function(x) x
+  
   # ------------------------------------------------------------------------------
   # RATE CALCULATIONS
   # ------------------------------------------------------------------------------
@@ -227,10 +228,14 @@ shinyServer(function(input, output, session){
   # ------------------------------------------------------------------------------
   # MICHAELIS-MENTEN PLOTS
   # ------------------------------------------------------------------------------
-  # reactive value for input data frame, current mm fit, and current plot
+  # reactive value for input data frame
   kin_data = reactiveVal(NULL)
+  
+  # reactive value for the current mm fit and its respective plot
   cur_fit = reactiveVal(NULL)
   cur_plt = reactiveVal(NULL)
+  
+  # reactive value the text displayed on error
   kin_plot_text = reactiveVal("no file chosen")
   
   # observe file input
