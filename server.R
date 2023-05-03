@@ -178,7 +178,10 @@ shinyServer(function(input, output, session){
                   click on the x value where the concentration is at the 
                   highest point right after the substrate is added. The app 
                   will then use 10% of the data following the second click to 
-                  calculate the rate of the reaction.</p>
+                  calculate the rate of the reaction. See below for an example 
+                  of where to click.</p>
+                  <img src='", knitr::image_uri("figures/example.png") , "', 
+                  style='width:100%'>
                   <p style='margin-bottom:10px;'>After selecting these two 
                   points on all of the plots, a table containing the names of 
                   the files and their respective rates will be generated below 
