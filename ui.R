@@ -90,12 +90,14 @@ ui = fluidPage(
                 # determining rates
                 tabPanel("Rates", value=1,
                          plotOutput("plt_out1", click="plot_click"),
-                         tableOutput("rate_out")
+                         tableOutput("rate_out"),
+                         tableOutput("rate_summary")
                 ),
                 # creating michaelis-menten plots
                 tabPanel("Michaelis-Menten", value=2,
                          plotOutput("plt_out2"),
-                         tableOutput("mm_out")
+                         tableOutput("mm_out"),
+                         tableOutput("mm_summary")
                 ),
                 id = "tabselected"
     )

@@ -3,6 +3,8 @@ library(drc)
 source("rate_core.R")
 
 shinyServer(function(input, output, session){
+  # function for not sanitizing tables
+  no_san = function(x) x
   # ------------------------------------------------------------------------------
   # RATE CALCULATIONS
   # ------------------------------------------------------------------------------
@@ -83,7 +85,9 @@ shinyServer(function(input, output, session){
         rate_list$name = append(rate_list$name, names(rates)[[i]])
         rate_list$rate = append(rate_list$rate, rates[[i]])
       }
-      last_rates(data.frame("Name"=rate_list$name, "Rate"=rate_list$rate))
+      last_rates(data.frame("File Name"=rate_list$name,
+                            "Rate"=rate_list$rate,
+                            check.names=FALSE))
     }
     
     if(cur_plt_index() != 0) {
@@ -102,7 +106,22 @@ shinyServer(function(input, output, session){
   # render the rate table when possible
   output$rate_out = renderTable({
     last_rates()
-  }, digits=8, width="80%")
+  }, digits=8, width="80%", sanitize.text.function=no_san)
+  
+  # render the table with summaries
+  output$rate_summary = renderTable({
+    prev_rates = last_rates()$Rate
+    if(is.null(prev_rates) || length(prev_rates) == 1) {
+      cur_sum = data.frame()
+    } else {
+      avg = mean(prev_rates)
+      stdev = sd(prev_rates)
+      cur_sum = data.frame(val_name=c("<b>Mean</b>", "<b>Standard Deviation</b>",
+                                      "<b>Relative Standard Deviation</b>"),
+                           val=c(avg, stdev, (stdev / avg * 100)))
+    }
+    cur_sum
+  }, digits=8, width="80%", colnames=FALSE, sanitize.text.function=no_san)
   
   # handle downloads
   output$dl_plt1 = downloadHandler(
@@ -221,6 +240,7 @@ shinyServer(function(input, output, session){
         cur_fit(NULL)
       } else if(!is.numeric(kin_data()[[1]]) && !is.numeric(kin_data()[[2]])) {
         kin_plot_text("bad file chosen\nfile must contain substrate concentrations in the first column and rates in the second")
+        cur_fit(NULL)
       } else {
         cur_fit(drm(kin_data()[[2]] ~ kin_data()[[1]], fct=MM.2()))
       }
@@ -279,13 +299,24 @@ shinyServer(function(input, output, session){
     if(is.null(coeffs)) {
       cur_vals = data.frame()
     } else {
-      cur_vals = data.frame("Variable"=c("Vmax", "Km"),
+      cur_vals = data.frame("Variable"=c("V<sub>max</sub>", "K<sub>m</sub>"),
                             "Value"=c(coeffs[[1]], coeffs[[2]]),
-                            "Std. Error"=as.data.frame(summary(cur_fit())[[3]])[["Std. Error"]],
+                            "Standard Error"=as.data.frame(summary(cur_fit())[[3]])[["Std. Error"]],
                             check.names=FALSE)
     }
     cur_vals
-  }, digits=8, width="80%")
+  }, digits=8, width="80%", sanitize.text.function=no_san)
+  
+  # render the other part of the summary
+  output$mm_summary = renderTable({
+    if(is.null(cur_fit())) {
+      cur_extra_vals = data.frame()
+    } else {
+      cur_extra_vals = data.frame(val_name=c("<b>Residual Standard Error</b>"),
+                                  val=c(summary(cur_fit())$rseMat[[1]]))
+    }
+    cur_extra_vals
+  }, digits=8, width="80%", colnames=FALSE, sanitize.text.function=no_san)
   
   # handle download press
   output$dl_plt2 = downloadHandler(
