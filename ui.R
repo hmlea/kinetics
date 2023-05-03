@@ -29,6 +29,9 @@ ui = fluidPage(
                      margin-bottom:-13px;
                    }")),
   
+  # script to change the browser tab title on tab change
+  tags$script(HTML('Shiny.addCustomMessageHandler("changetitle", function(x) {document.title=x});')),
+  
   # icon and title
   tags$head(tags$link(rel="shortcut icon",
                       href=knitr::image_uri("kinetics.ico"),
@@ -85,8 +88,8 @@ ui = fluidPage(
   ),
   
   mainPanel(
-    align = "center",
-    tabsetPanel(type="tabs",
+    align="center",
+    tabsetPanel(id="tabselected", type="tabs",
                 # determining rates
                 tabPanel("Rates", value=1,
                          plotOutput("plt_out1", click="plot_click"),
@@ -98,8 +101,7 @@ ui = fluidPage(
                          plotOutput("plt_out2"),
                          tableOutput("mm_out"),
                          tableOutput("mm_summary")
-                ),
-                id = "tabselected"
+                )
     )
   )
 )

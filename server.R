@@ -331,5 +331,16 @@ shinyServer(function(input, output, session){
       dev.off()
     }
   )
+  
+  # update title when tab is switched
+  observeEvent(input$tabselected, {
+    if(input$tabselected == 1) {
+      session$sendCustomMessage("changetitle", "Kinetics - Rates")
+    } else if(input$tabselected == 2) {
+      session$sendCustomMessage("changetitle", "Kinetics - MM")
+    } else {
+      session$sendCustomMessage("changetitle", "Kinetics")
+    }
+  })
 })
 
